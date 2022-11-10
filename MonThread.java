@@ -3,7 +3,7 @@ import java.net.Socket;
 
 public class MonThread extends Thread{
     private Socket client = null;
-    public MonThread(Socket client) throws IOException{
+    public MonThread(String s, Socket client) throws IOException{
         this.client = client;
         ObjectInputStream objIn = new ObjectInputStream(client.getInputStream());
         ObjectOutputStream objOut = new ObjectOutputStream(client.getOutputStream());
