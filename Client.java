@@ -1,40 +1,95 @@
 import java.io.*;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Client {
+    static boolean n = true;
+    public static int i ;
+
+    public static int m ;
+
+    static Scanner sct = new Scanner(System.in);
+    static Object strg ;
 
     public static void main(String[] args) throws UnknownHostException, IOException {
         Socket s = null;
         int i =0;
-        try{
+        try {
+
+            ArrayList<Object> La = new ArrayList<Object>();
+            ArrayList<Object> Attrs = new ArrayList<Object>();
             System.out.println("Connexion en cours");
             s = new Socket("127.0.0.1", 65530); //Création du socket
 
             //Récupération du flux d'entrée/sortie
-
             InputStream in = s.getInputStream();
             OutputStream out = s.getOutputStream();
-
-            ObjectOutputStream objOut = new ObjectOutputStream(out);
             ObjectInputStream objIn = new ObjectInputStream(in);
-
-            Integer O = 4;
+            ObjectOutputStream objOut = new ObjectOutputStream(out);
+            Integer O = 6;
             objOut.writeObject(O);
-            System.out.println("Objet envoyé (client" +i+ ") :" +O);
+
+            System.out.println("Objet envoyé (client" + i + ") :" + O);
 
             try{
-                Integer I = (Integer)objIn.readObject();
-                System.out.println("Objet reçu (client) "+I);
-            }catch (ClassNotFoundException e){
+                //Integer I= (Integer)objIn.readObject();
+                strg= (Object)objIn.readObject();
+                System.out.println("Paquet reçu (client"+i+""+ ") :"+strg);
+
+                Class strgclass = strg.getClass();
+                Field[] attrs = strgclass.getFields();
+
+
+
+                La.add("Objet : "+strg);
+                La.add("ObjetClass : "+strgclass);
+                for( i=0 ; i < attrs.length; i++)
+                {
+                    Field f = attrs[i];
+                    String ClassName = f.getName() ;
+                    Class SuperClass = f.getClass().getSuperclass();
+                    Class Type=f.getType();
+
+
+                    Attrs.add("["+i+"]"+f);
+                    Attrs.add("ClassNameA["+i+"] : "+ClassName);
+                    Attrs.add("SuperClassA["+i+"] : "+SuperClass);
+                    Attrs.add("TypeA["+i+"] : "+Type);
+                    m=i;
+                }
+                La.add("NBRattributs = "+m) ;
+                La.add("Attributs : "+Attrs);
+                Integer I= (Integer)objIn.readObject();
+                System.out.println("Paquet reçu (client"+i+""
+                        + ") :"+I);
+
+            }catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
-
-
+            i++;
             s.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        /*try{
+            assert s != null;
+
+            Integer I = (Integer)objIn.readObject();
+            System.out.println("Objet reçu (client)"+i+":"+I);
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }*/
+
+
+
+
+
+
 
     }
 }
