@@ -22,23 +22,24 @@ public class Client {
 
             ArrayList<Object> La = new ArrayList<Object>();
             ArrayList<Object> Attrs = new ArrayList<Object>();
-            System.out.println("Connexion en cours");
             s = new Socket("127.0.0.1", 65530); //Création du socket
+            System.out.println("Connexion");
+
 
             //Récupération du flux d'entrée/sortie
             InputStream in = s.getInputStream();
-            OutputStream out = s.getOutputStream();
             ObjectInputStream objIn = new ObjectInputStream(in);
+            OutputStream out = s.getOutputStream();
             ObjectOutputStream objOut = new ObjectOutputStream(out);
             Integer O = 6;
             objOut.writeObject(O);
-
             System.out.println("Objet envoyé (client" + i + ") :" + O);
 
             try{
-                //Integer I= (Integer)objIn.readObject();
+                Integer I= (Integer)objIn.readObject();
+                System.out.println("Objet reçu (client"+i+""+ ") :"+I);
                 strg= (Object)objIn.readObject();
-                System.out.println("Paquet reçu (client"+i+""+ ") :"+strg);
+                System.out.println("Objet reçu (client"+i+""+ ") :"+strg);
 
                 Class strgclass = strg.getClass();
                 Field[] attrs = strgclass.getFields();
@@ -59,25 +60,42 @@ public class Client {
                     Attrs.add("ClassNameA["+i+"] : "+ClassName);
                     Attrs.add("SuperClassA["+i+"] : "+SuperClass);
                     Attrs.add("TypeA["+i+"] : "+Type);
-                    m=i;
+                    m=i+1;
                 }
                 La.add("NBRattributs = "+m) ;
                 La.add("Attributs : "+Attrs);
-                Integer I= (Integer)objIn.readObject();
-                System.out.println("Paquet reçu (client"+i+""
-                        + ") :"+I);
+
+                System.out.println(""+strg);
+                //Fenetre fen = new Fenetre(m);
 
             }catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
+
+            /*
+			     System.out.println("Saisissez les attributs de la liste d'objet :");
+				 strg = sct.nextLine();
+				 for(int x=0;x<str.length();x++){
+				     C[x] = str.charAt(x);
+				 }
+				 System.out.println("Vous avez saisi  : " + strg);
+				 */
+
+            objOut.writeObject(La);
+            System.out.println("Objet envoyé (client"+i+") :"+La);
             i++;
             s.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
+
         /*try{
             assert s != null;
 
+            ObjectInput objIn = new ObjectInputStream(in);
             Integer I = (Integer)objIn.readObject();
             System.out.println("Objet reçu (client)"+i+":"+I);
         }
