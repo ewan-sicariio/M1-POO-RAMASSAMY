@@ -31,7 +31,7 @@ public class Client {
             ObjectInputStream objIn = new ObjectInputStream(in);
             OutputStream out = s.getOutputStream();
             ObjectOutputStream objOut = new ObjectOutputStream(out);
-            Integer O = 6;
+            Integer O = 3;
             objOut.writeObject(O);
             System.out.println("Objet envoyé (client" + i + ") :" + O);
 
@@ -66,20 +66,12 @@ public class Client {
                 La.add("Attributs : "+Attrs);
 
                 System.out.println(""+strg);
-                //Fenetre fen = new Fenetre(m);
+                Fenetre fen = new Fenetre(m);
 
             }catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
-            /*
-			     System.out.println("Saisissez les attributs de la liste d'objet :");
-				 strg = sct.nextLine();
-				 for(int x=0;x<str.length();x++){
-				     C[x] = str.charAt(x);
-				 }
-				 System.out.println("Vous avez saisi  : " + strg);
-				 */
 
             objOut.writeObject(La);
             System.out.println("Objet envoyé (client"+i+") :"+La);
@@ -88,25 +80,6 @@ public class Client {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
-
-        /*try{
-            assert s != null;
-
-            ObjectInput objIn = new ObjectInputStream(in);
-            Integer I = (Integer)objIn.readObject();
-            System.out.println("Objet reçu (client)"+i+":"+I);
-        }
-        catch (ClassNotFoundException e){
-            e.printStackTrace();
-        }*/
-
-
-
-
-
 
 
     }
